@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Spotify Web Playback Test</title>
+</head>
+<body>
+    <h1>Spotify Web Playback SDK Quick Start</h1>
+    
+
+    <form>
+        <label for="tokIN">Premium Spotify token (can be generated <a href="https://accounts.spotify.com/en/login?continue=https:%2F%2Faccounts.spotify.com%2Fauthorize%3Fscope%3Dstreaming%2Buser-read-email%2Buser-modify-playback-state%2Buser-read-private%26response_type%3Dtoken%26redirect_uri%3Dhttps%253A%252F%252Fdeveloper.spotify.com%252Fdocumentation%252Fweb-playback-sdk%252Fquick-start%252F%26client_id%3Dadaaf209fb064dfab873a71817029e0d%26show_dialog%3Dtrue"> here</a>):</label><br>
+        <input type="text" id="tokIN" name="tokIN"><br>
+        <label for="songIN">Input the URI of the song (can be obtained by right clicking the song in spotify then holding alt while havering the "share" option):</label><br>
+        <input type="text" id="songIN" name="songIN">
+    </form> 
+
+    <button id="Search">Search</button>
+      
+    <button id="togglePlay">Toggle Play</button>
+    <script src="https://sdk.scdn.co/spotify-player.js"></script>
+    <script>
+        
+        
+        window.onSpotifyWebPlaybackSDKReady = () => {
+            console.log("ready");
+            document.getElementById('Search').onclick = function() {
+                const token = document.getElementById('tokIN').value;
+                console.log(token);
+                const song = document.getElementById('songIN').value;
+                console.log(song);
+    
+                const player = new Spotify.Player({
+                    name: 'Web Playback SDK Quick Start Player',
+                    getOAuthToken: cb => { 
+                        
+                        
+                        
+                        cb(token); },
+                    volume: 0.5
+                });
+            
+
+                // Ready
+                player.addListener('ready', ({ device_id }) => {
+                    console.log('Ready with Device ID', device_id);
+                });
+
+                // Not Ready
+                player.addListener('not_ready', ({ device_id }) => {
+                    console.log('Device ID has gone offline', device_id);
+                });
+
+                player.addListener('initialization_error', ({ message }) => {
+                    console.error(message);
+                });
+
+                player.addListener('authentication_error', ({ message }) => {
+                    console.error(message);
+                });
+
+                player.addListener('account_error', ({ message }) => {
+                    console.error(message);
+                });
+
+
+
+
+                
+
+                document.getElementById('togglePlay').onclick = function() {
+                player.togglePlay();
+                };
+
+                player.connect();
+            };
+        }
+    
+    </script>
+</body>
+</html>
